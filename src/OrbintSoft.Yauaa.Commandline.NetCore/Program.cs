@@ -122,8 +122,9 @@ namespace OrbintSoft.Yauaa.Commandline
                     writer.WriteLine();
                     break;
                 case OutputFormat.JSON:
-                    writer.WriteLine(agent.ToJson(fields));
-                    break;
+                    throw new NotImplementedException();
+                //writer.WriteLine(agent.ToJson(fields));
+                //break;
                 case OutputFormat.YAML:
                     writer.WriteLine(agent.ToYamlTestCase());
                     break;
@@ -133,7 +134,7 @@ namespace OrbintSoft.Yauaa.Commandline
                 case OutputFormat.TEXT:
                     writer.WriteLine(agent.ToString(fields));
                     break;
-                case OutputFormat.UNSUPPORTED:                
+                case OutputFormat.UNSUPPORTED:
                 default:
                     writer.WriteLine("Not supported yet.");
                     break;
@@ -214,7 +215,7 @@ namespace OrbintSoft.Yauaa.Commandline
             if (!string.IsNullOrWhiteSpace(commandlineOptions.OutFile))
             {
                 stream.Dispose(); //I dispose file stream, console should not be disposed
-            }            
+            }
         }
 
         private static StreamWriter GetStream(Options commandlineOptions)
@@ -222,7 +223,8 @@ namespace OrbintSoft.Yauaa.Commandline
             if (!string.IsNullOrWhiteSpace(commandlineOptions.OutFile))
             {
                 return new StreamWriter(commandlineOptions.OutFile);
-            } else
+            }
+            else
             {
                 var sw = new StreamWriter(Console.OpenStandardOutput())
                 {
@@ -231,7 +233,7 @@ namespace OrbintSoft.Yauaa.Commandline
                 Console.SetOut(sw);
                 return sw;
             }
-        }       
+        }
 
         private static IList<string> GetFields(Options commandlineOptions, UserAgentAnalyzerTester uaa)
         {

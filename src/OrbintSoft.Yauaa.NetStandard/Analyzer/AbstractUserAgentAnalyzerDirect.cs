@@ -32,6 +32,7 @@ namespace OrbintSoft.Yauaa.Analyzer
     using System.Globalization;
     using System.IO;
     using System.Linq;
+    using System.Reflection;
     using System.Text;
     using Antlr4.Runtime.Tree;
     using OrbintSoft.Yauaa.Analyze;
@@ -61,7 +62,7 @@ namespace OrbintSoft.Yauaa.Analyzer
         /// <summary>
         /// Defines the default resources path to be loaded.
         /// </summary>
-        protected internal static readonly ResourcesPath DefaultResources = new ResourcesPath($@"YamlResources{Path.DirectorySeparatorChar}UserAgents", "*.yaml");
+        protected internal static readonly ResourcesPath DefaultResources = new ResourcesPath("YamlResources.UserAgents", ".yaml", typeof(AbstractUserAgentAnalyzerDirect).Assembly, "OrbintSoft.Yauaa");
 
         /// <summary>
         /// Defines the max iterations that can be used for preheat.
@@ -316,7 +317,7 @@ namespace OrbintSoft.Yauaa.Analyzer
         /// </summary>
         /// <param name="resourceString">The folder path where to load all resources.</param>
         /// <param name="pattern">The pattern, for default all yaml files in the folder will be loaded.</param>
-        public void LoadResources(string resourceString, string pattern = "*.yaml")
+        public void LoadResources(string resourceString, string pattern = "*.yaml", Assembly from_assembly = null)
         {
             if (this.matchersHaveBeenInitialized)
             {
@@ -329,17 +330,29 @@ namespace OrbintSoft.Yauaa.Analyzer
             YamlDocument yaml;
 
 #if VERBOSE
-            IDictionary<string, FileInfo> resources = new SortedDictionary<string, FileInfo>(StringComparer.Ordinal);
+            IDictionary<string, Func<Stream>> resources = new SortedDictionary<string, Func<Stream>>(StringComparer.Ordinal);
 #else
-            IDictionary<string, FileInfo> resources = new Dictionary<string, FileInfo>();
+            IDictionary<string, Func<Stream>> resources = new Dictionary<string, Func<Stream>>();
 #endif
             try
             {
-                var filePaths = Directory.GetFiles(resourceString, pattern, SearchOption.TopDirectoryOnly);
-
-                foreach (var filePath in filePaths)
+                if (from_assembly is null)
                 {
-                    resources[Path.GetFileName(filePath)] = new FileInfo(filePath);
+                    var filePaths = Directory.GetFiles(resourceString, pattern, SearchOption.TopDirectoryOnly);
+
+                    foreach (var filePath in filePaths)
+                    {
+                        resources[Path.GetFileName(filePath)] = () => new FileStream(filePath, FileMode.Open, FileAccess.Read);
+                    }
+                }
+                else
+                {
+                    foreach (var resource in from_assembly.GetManifestResourceNames()
+                        .Where(n => n.StartsWith(resourceString) && n.EndsWith(pattern))
+                        .Select<string, (string, Func<Stream>)>(n => (n, () => from_assembly.GetManifestResourceStream(n))))
+                    {
+                        resources[resource.Item1] = resource.Item2;
+                    }
                 }
             }
             catch (Exception e)
@@ -369,10 +382,11 @@ namespace OrbintSoft.Yauaa.Analyzer
 
             foreach (var resourceEntry in resources)
             {
-                var filename = resourceEntry.Value.Name;
+                var filename = resourceEntry.Key;
                 try
                 {
-                    using (var reader = new StreamReader(resourceEntry.Value.FullName))
+                    using (var resource = resourceEntry.Value())
+                    using (var reader = new StreamReader(resource))
                     {
                         // Load the stream
                         var yamlStream = new YamlStream();
@@ -436,8 +450,7 @@ namespace OrbintSoft.Yauaa.Analyzer
             {
                 foreach (var resourceEntry in resources)
                 {
-                    var resource = resourceEntry.Value;
-                    var configFilename = resource.Name;
+                    var configFilename = resourceEntry.Key;
                     IList<YamlMappingNode> matcherConfig;
                     if (this.matcherConfigs.ContainsKey(configFilename))
                     {
@@ -939,7 +952,7 @@ namespace OrbintSoft.Yauaa.Analyzer
 
             foreach (var r in resources)
             {
-                this.LoadResources(r.Directory, r.Filter);
+                this.LoadResources(r.Directory, r.Filter, r.AssemblyResource);
             }
 
             if (!this.matcherConfigs.Any())

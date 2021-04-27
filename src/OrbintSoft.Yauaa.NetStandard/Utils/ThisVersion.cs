@@ -73,7 +73,7 @@ namespace OrbintSoft.Yauaa.Utils
         /// <summary>
         /// Gets the git commit id.
         /// </summary>
-        public static string GitCommitIdDescribeShort => ThisAssembly.Git.Commit;
+        public static string GitCommitIdDescribeShort => string.Empty;
 
         /// <summary>
         /// Gets the license text.

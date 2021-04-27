@@ -28,6 +28,7 @@ namespace OrbintSoft.Yauaa.Utils
 {
     using System;
     using System.IO;
+    using System.Reflection;
 
     /// <summary>
     /// Represent a set of resources based on a directory and a file filter.
@@ -39,15 +40,24 @@ namespace OrbintSoft.Yauaa.Utils
         /// </summary>
         /// <param name="directory">The directory<see cref="string"/>.</param>
         /// <param name="filter">The filter<see cref="string"/>.</param>
-        public ResourcesPath(string directory, string filter = ".yaml")
+        public ResourcesPath(string directory, string filter = ".yaml", Assembly assembly_resource = null, string default_namespace = null)
         {
-            if (!Path.IsPathRooted(directory))
+            if (assembly_resource is null)
             {
-                directory = Path.Combine(BasePath, directory);
+                if (!Path.IsPathRooted(directory))
+                {
+                    directory = Path.Combine(BasePath, directory);
+                }
+            }
+            else
+            {
+
+                directory = $"{default_namespace ?? assembly_resource.GetName().Name}.{directory}";
             }
 
             this.Directory = directory;
             this.Filter = filter;
+            this.AssemblyResource = assembly_resource;
         }
 
         /// <summary>
@@ -66,5 +76,7 @@ namespace OrbintSoft.Yauaa.Utils
         /// A search pattern to load only files that correspond to a provided criteria, useful also to load only one file.
         /// </summary>
         public string Filter { get; }
+
+        public Assembly AssemblyResource { get; }
     }
 }

@@ -24,6 +24,11 @@
 // <date>2018, 11, 24, 12:49</date>
 //-----------------------------------------------------------------------
 
+using Nager.PublicSuffix;
+using System.Collections.Generic;
+using System.IO;
+using System.Threading.Tasks;
+
 namespace OrbintSoft.Yauaa.Utils.PublicSuffix
 {
     /// <summary>
@@ -31,6 +36,53 @@ namespace OrbintSoft.Yauaa.Utils.PublicSuffix
     /// </summary>
     public class PublicSuffixMatcher
     {
+        private class Provider : Nager.PublicSuffix.ITldRuleProvider
+        {
+            private const string TOPDOMAIN_PSL_RESOURCE_NAME = "OrbintSoft.Yauaa.td_public_suffix_list.txt";
+            public Task<IEnumerable<Nager.PublicSuffix.TldRule>> BuildAsync()
+            {
+                var assembly = typeof(PublicSuffixMatcher).Assembly;
+                using (var resource = assembly.GetManifestResourceStream(TOPDOMAIN_PSL_RESOURCE_NAME))
+                using (var reader = new StreamReader(resource))
+                {
+                    var ruleData = reader.ReadToEnd();
+                    var ruleParser = new TldRuleParser();
+                    var rules = ruleParser.ParseRules(ruleData);
+                    return Task.FromResult(rules);
+                }
+            }
+        }
 
+        private readonly Nager.PublicSuffix.DomainParser _domainParser;
+
+        public PublicSuffixMatcher()
+        {
+            _domainParser = new Nager.PublicSuffix.DomainParser(new Provider());
+        }
+
+        public static PublicSuffixMatcher DefaultInstance { get; } = new PublicSuffixMatcher();
+
+        public bool TryParse(string hostname, out DomainInfo rval)
+        {
+            try
+            {
+                rval = _domainParser.Parse(hostname);
+                return true;
+            }
+            catch
+            {
+                rval = default;
+                return false;
+            }
+        }
+    }
+}
+
+namespace DomainParser.Library
+{
+    public static class DomainName
+    {
+        public static bool TryParse(string hostname, out DomainInfo rval)
+            => OrbintSoft.Yauaa.Utils.PublicSuffix.PublicSuffixMatcher.DefaultInstance.TryParse(hostname, out rval);
     }
 }

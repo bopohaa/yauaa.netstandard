@@ -33,7 +33,7 @@ namespace OrbintSoft.Yauaa.Analyzer
     using System.Security;
     using System.Text;
     using Antlr4.Runtime;
-    using Newtonsoft.Json;
+    //using Newtonsoft.Json;
     using OrbintSoft.Yauaa.Analyze;
     using OrbintSoft.Yauaa.Antlr4Source;
     using OrbintSoft.Yauaa.Logger;
@@ -997,6 +997,7 @@ namespace OrbintSoft.Yauaa.Analyzer
             this.allFields[DefaultUserAgentFields.SYNTAX_ERROR] = syntaxError;
         }
 
+        /*
         /// <summary>
         /// Gives a JSON representation of the user agent.
         /// </summary>
@@ -1010,6 +1011,7 @@ namespace OrbintSoft.Yauaa.Analyzer
             fields.AddRange(this.GetAvailableFieldNamesSorted());
             return this.ToJson(fields);
         }
+        */
 
         /// <summary>
         /// Gives an XML representation of the user agent.
@@ -1060,6 +1062,7 @@ namespace OrbintSoft.Yauaa.Analyzer
             return sb.ToString();
         }
 
+        /*
         /// <summary>
         /// Gives an JSON representation of the user agent.
         /// </summary>
@@ -1100,6 +1103,7 @@ namespace OrbintSoft.Yauaa.Analyzer
             sb.Append("}");
             return sb.ToString();
         }
+        */
 
         /// <inheritdoc/>
         public override string ToString()

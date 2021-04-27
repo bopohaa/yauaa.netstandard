@@ -29,6 +29,9 @@
   <ItemGroup>
     <ProjectReference Include="..\OrbintSoft.Yauaa.NetStandard\OrbintSoft.Yauaa.NetStandard.csproj" />
   </ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="log4net" Version="2.0.8" />
+	</ItemGroup>
 
   <ItemGroup>
     <None Update="log4net.config">

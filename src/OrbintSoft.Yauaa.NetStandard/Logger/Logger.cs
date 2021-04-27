@@ -27,7 +27,7 @@
 namespace OrbintSoft.Yauaa.Logger
 {
     using System;
-    using log4net;
+    //using log4net;
 
     /// <summary>
     /// Used to log with log4net.
@@ -35,38 +35,51 @@ namespace OrbintSoft.Yauaa.Logger
     /// <typeparam name="T">type to categorize logging.</typeparam>
     public class Logger<T> : ILogger
     {
-        private readonly ILog log4NetLogger;
+        //private readonly ILog log4NetLogger;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Logger{T}"/> class.
         /// </summary>
         public Logger()
         {
-            this.log4NetLogger = LogManager.GetLogger(typeof(T));
+            //this.log4NetLogger = LogManager.GetLogger(typeof(T));
         }
 
         /// <inheritdoc/>
         public void Debug(FormattableString message)
         {
-            this.log4NetLogger.DebugFormat(message.Format, message.GetArguments());
+#if DEBUG
+            System.Diagnostics.Debugger.Log(0, nameof(T), message.ToString() + "\r\n");
+#endif
+            //this.log4NetLogger.DebugFormat(message.Format, message.GetArguments());
         }
 
         /// <inheritdoc/>
         public void Error(FormattableString message)
         {
-            this.log4NetLogger.ErrorFormat(message.Format, message.GetArguments());
+#if DEBUG
+            System.Diagnostics.Debugger.Log(4, nameof(T), message.ToString() + "\r\n");
+#endif
+            //this.log4NetLogger.ErrorFormat(message.Format, message.GetArguments());
         }
 
         /// <inheritdoc/>
         public void Info(FormattableString message)
         {
-            this.log4NetLogger.InfoFormat(message.Format, message.GetArguments());
+#if DEBUG
+            System.Diagnostics.Debugger.Log(2, nameof(T), message.ToString() + "\r\n");
+#endif
+            //this.log4NetLogger.InfoFormat(message.Format, message.GetArguments());
         }
 
         /// <inheritdoc/>
         public void Warn(FormattableString message)
         {
-            this.log4NetLogger.WarnFormat(message.Format, message.GetArguments());
+#if DEBUG
+            System.Diagnostics.Debugger.Log(3, nameof(T), message.ToString() + "\r\n");
+#endif
+
+            //this.log4NetLogger.WarnFormat(message.Format, message.GetArguments());
         }
     }
 }

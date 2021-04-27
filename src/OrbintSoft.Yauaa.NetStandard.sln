@@ -7,8 +7,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OrbintSoft.Yauaa.NetStandar
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OrbintSoft.Yauaa.Benchmarking.NetCore", "OrbintSoft.Yauaa.Benchmarking.NetCore\OrbintSoft.Yauaa.Benchmarking.NetCore.csproj", "{E7B76514-DAEF-4406-ADF7-7C7427EC0B53}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OrbintSoft.Yauaa.Testing.NetCore", "OrbintSoft.Yauaa.Testing.NetCore\OrbintSoft.Yauaa.Testing.NetCore.csproj", "{F00F6CDE-E35F-4841-B056-C6FE8292CC38}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OrbintSoft.Yauaa.Commandline.NetCore", "OrbintSoft.Yauaa.Commandline.NetCore\OrbintSoft.Yauaa.Commandline.NetCore.csproj", "{8B891255-0BB7-4898-8CE4-834223130F18}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OrbintSoft.Yauaa.WebSample.AspNetCore", "OrbintSoft.Yauaa.WebSample.AspNetCore\OrbintSoft.Yauaa.WebSample.AspNetCore.csproj", "{05C56A45-1331-4051-A319-DA7EE8EA002F}"
@@ -20,6 +18,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Readme", "Readme", "{10122C
 		..\LICENSE = ..\LICENSE
 		..\README.md = ..\README.md
 	EndProjectSection
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OrbintSoft.Yauaa.Testing.NetCore", "OrbintSoft.Yauaa.Testing.NetCore\OrbintSoft.Yauaa.Testing.NetCore.csproj", "{11F566C2-0ACF-4F5C-A27B-B82D385C7A3B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -40,12 +40,6 @@ Global
 		{E7B76514-DAEF-4406-ADF7-7C7427EC0B53}.Release|Any CPU.Build.0 = Release|Any CPU
 		{E7B76514-DAEF-4406-ADF7-7C7427EC0B53}.Verbose|Any CPU.ActiveCfg = Debug|Any CPU
 		{E7B76514-DAEF-4406-ADF7-7C7427EC0B53}.Verbose|Any CPU.Build.0 = Debug|Any CPU
-		{F00F6CDE-E35F-4841-B056-C6FE8292CC38}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{F00F6CDE-E35F-4841-B056-C6FE8292CC38}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{F00F6CDE-E35F-4841-B056-C6FE8292CC38}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{F00F6CDE-E35F-4841-B056-C6FE8292CC38}.Release|Any CPU.Build.0 = Release|Any CPU
-		{F00F6CDE-E35F-4841-B056-C6FE8292CC38}.Verbose|Any CPU.ActiveCfg = Verbose|Any CPU
-		{F00F6CDE-E35F-4841-B056-C6FE8292CC38}.Verbose|Any CPU.Build.0 = Verbose|Any CPU
 		{8B891255-0BB7-4898-8CE4-834223130F18}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{8B891255-0BB7-4898-8CE4-834223130F18}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8B891255-0BB7-4898-8CE4-834223130F18}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -58,6 +52,12 @@ Global
 		{05C56A45-1331-4051-A319-DA7EE8EA002F}.Release|Any CPU.Build.0 = Release|Any CPU
 		{05C56A45-1331-4051-A319-DA7EE8EA002F}.Verbose|Any CPU.ActiveCfg = Debug|Any CPU
 		{05C56A45-1331-4051-A319-DA7EE8EA002F}.Verbose|Any CPU.Build.0 = Debug|Any CPU
+		{11F566C2-0ACF-4F5C-A27B-B82D385C7A3B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{11F566C2-0ACF-4F5C-A27B-B82D385C7A3B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{11F566C2-0ACF-4F5C-A27B-B82D385C7A3B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{11F566C2-0ACF-4F5C-A27B-B82D385C7A3B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{11F566C2-0ACF-4F5C-A27B-B82D385C7A3B}.Verbose|Any CPU.ActiveCfg = Verbose|Any CPU
+		{11F566C2-0ACF-4F5C-A27B-B82D385C7A3B}.Verbose|Any CPU.Build.0 = Verbose|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
