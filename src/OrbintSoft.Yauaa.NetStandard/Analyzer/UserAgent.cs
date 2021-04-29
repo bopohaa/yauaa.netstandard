@@ -822,9 +822,9 @@ namespace OrbintSoft.Yauaa.Analyzer
                 return 0L;
             }
 
-            if (this.allFields.ContainsKey(fieldName))
+            if(this.allFields.TryGetValue(fieldName, out var field))
             {
-                return this.allFields[fieldName].GetConfidence();
+                return field.GetConfidence();
             }
             else
             {
@@ -838,10 +838,10 @@ namespace OrbintSoft.Yauaa.Analyzer
             var hash = 3060293; // A random number
             foreach (var item in this.allFields.Keys)
             {
-                hash = new Tuple<int, AgentField, string>(hash, this.allFields[item], item).GetHashCode();
+                hash = (hash, this.allFields[item], item).GetHashCode();
             }
 
-            return ValueTuple.Create(this.userAgentString, hash).GetHashCode();
+            return (this.userAgentString, hash).GetHashCode();
         }
 
         /// <inheritdoc/>
@@ -852,13 +852,12 @@ namespace OrbintSoft.Yauaa.Analyzer
                 return this.userAgentString;
             }
 
-            var field = this.allFields.ContainsKey(fieldName) ? this.allFields[fieldName] : null;
-            if (field == null)
+            if(this.allFields.TryGetValue(fieldName, out var field))
             {
-                return DefaultUserAgentFields.UNKNOWN_VALUE;
+                return field.GetValue();
             }
 
-            return field.GetValue();
+            return DefaultUserAgentFields.UNKNOWN_VALUE;
         }
 
         /// <summary>
@@ -897,14 +896,14 @@ namespace OrbintSoft.Yauaa.Analyzer
         /// <inheritdoc/>
         public virtual void Set(string attribute, string value, long confidence)
         {
-            var field = this.allFields.ContainsKey(attribute) ? this.allFields[attribute] : null;
-            if (field == null)
+            if(!this.allFields.TryGetValue(attribute, out var field))
             {
                 field = new AgentField(null); // The fields we do not know get a 'null' default
+                this.allFields[attribute] = field;
             }
+            var updated = field.SetValue(value, confidence);
 
             var wasEmpty = confidence == -1;
-            var updated = field.SetValue(value, confidence);
             if (this.IsDebug && !wasEmpty)
             {
                 if (updated)
@@ -916,8 +915,6 @@ namespace OrbintSoft.Yauaa.Analyzer
                     Logger.Info($"SKIP {attribute} ({confidence}) = {value ?? "null"}");
                 }
             }
-
-            this.allFields[attribute] = field;
         }
 
         /// <summary>
@@ -937,24 +934,18 @@ namespace OrbintSoft.Yauaa.Analyzer
         /// <inheritdoc/>
         public void SetForced(string attribute, string value, long confidence)
         {
-            AgentField field;
-            if (this.allFields.ContainsKey(attribute))
-            {
-                field = this.allFields[attribute];
-            }
-            else
+            if (!this.allFields.TryGetValue(attribute, out var field))
             {
                 field = new AgentField(null); // The fields we do not know get a 'null' default
+                this.allFields[attribute] = field;
             }
+            field.SetValueForced(value, confidence);
 
             var wasEmpty = confidence == -1;
-            field.SetValueForced(value, confidence);
             if (this.IsDebug && !wasEmpty)
             {
                 Logger.Info($"USE  {attribute} ({confidence}) = {value}");
             }
-
-            this.allFields[attribute] = field;
         }
 
         /// <summary>
